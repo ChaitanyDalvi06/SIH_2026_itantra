@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#070d1e" />
+  <meta name="description" content="iTantra EdgeSpeech — Real-time voice communication with local STT & TTS, intelligent pause detection, and contextual understanding for Hindi and English." />
+  <title>iTantra EdgeSpeech Transceiver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="phone.css" />
+</head>
+<body>
+  <div class="mobile-viewport">
+    <!-- Top App Bar -->
+    <header class="mobile-header">
+      <div class="header-left">
+        <span class="status-indicator" id="statusIndicator"></span>
+        <div>
+          <h1 class="device-title" id="deviceTitle">Phone A (Local Node)</h1>
+          <p class="connection-sub" id="connectionSub">Wi-Fi Direct • Secure Bus</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="audioInitBtn" title="Enable Loudspeaker">🔊 Audio</button>
+      </div>
+    </header>
+
+    <!-- Language Selector Bar -->
+    <div class="language-bar">
+      <label>ACTIVE REGIONAL LANGUAGE</label>
+      <select id="mobileLangSelect">
+        <option value="hi" selected>🇮🇳 हिन्दी (Hindi - hi-IN)</option>
+        <option value="en">🇮🇳 English (Indian - en-IN)</option>
+        <option value="mr">🇮🇳 मराठी (Marathi - mr-IN)</option>
+        <option value="gu">🇮🇳 ગુજરાતી (Gujarati)</option>
+        <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+        <option value="te">🇮🇳 తెలుగు (Telugu)</option>
+        <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
+        <option value="ml">🇮🇳 മലയാളം (Malayalam)</option>
+        <option value="bn">🇮🇳 বাংলা (Bengali)</option>
+        <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
+      </select>
+    </div>
+
+    <!-- Hands-Free / Mode Bar -->
+    <div class="mode-bar">
+      <div class="hands-free-toggle" id="handsFreeToggle">
+        <div class="toggle-switch"></div>
+        <span class="toggle-text">Hands-Free (Auto-Detect Speech)</span>
+      </div>
+    </div>
+
+    <!-- Active Speech Status Card -->
+    <div class="status-card" id="statusCard">
+      <div class="card-meta">
+        <span class="vad-tag" id="vadTag">
+          <span class="vad-dot"></span>
+          VAD IDLE
+        </span>
+        <span class="crypto-tag">🔒 AES-256-GCM</span>
+      </div>
+
+      <!-- Real-Time Audio Level Visualizer -->
+      <div class="audio-visualizer" id="audioVisualizer">
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+        <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+      </div>
+
+      <!-- Transcript Display -->
+      <p class="transcript-display" id="transcriptDisplay">Hold PTT to speak, or enable hands-free mode.</p>
+
+      <!-- Endpoint State Indicator -->
+      <div class="endpoint-state" id="endpointState">
+        <span class="endpoint-dot"></span>
+        <span id="endpointLabel">Endpoint: IDLE</span>
+      </div>
+
+      <!-- Peer Typing Indicator -->
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="typing-dots">
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        </div>
+        <span class="typing-text" id="typingText">Peer is speaking...</span>
+      </div>
+
+      <!-- Context Badges (shown on send/receive) -->
+      <div class="context-badges" id="contextBadges"></div>
+
+      <!-- TTS Playback Status -->
+      <div class="tts-status" id="ttsStatus">
+        <div class="tts-waves">
+          <span class="tts-wave-bar"></span>
+          <span class="tts-wave-bar"></span>
+          <span class="tts-wave-bar"></span>
+          <span class="tts-wave-bar"></span>
+          <span class="tts-wave-bar"></span>
+        </div>
+        <span class="tts-label">Playing speech...</span>
+      </div>
+    </div>
+
+    <!-- Direct Custom Text Input for Testing -->
+    <div class="custom-input-bar">
+      <input type="text" id="customTextInput" placeholder="Type in Hindi, English, or any language..." />
+      <button id="customSendBtn">SEND</button>
+    </div>
+
+    <!-- Quick Spoken Phrases -->
+    <div class="quick-chips-section">
+      <span class="chips-title">REGIONAL PHRASES (1-TAP TEST)</span>
+      <div class="chips-scroll" id="chipsScroll"></div>
+    </div>
+
+    <!-- Recent Communication Feed -->
+    <div class="feed-section">
+      <div class="feed-header">
+        <span>LIVE SPEECH CHANNEL</span>
+        <span class="comp-badge">99.86% Less Data</span>
+      </div>
+      <div class="feed-list" id="feedList"></div>
+    </div>
+
+    <!-- Bottom Controls & PTT -->
+    <footer class="bottom-action-bar">
+      <!-- Emergency Alert Button -->
+      <button class="mobile-alert-btn" id="mobileAlertBtn">
+        🚨 BROADCAST EMERGENCY ALERT
+      </button>
+
+      <!-- Huge PTT Touch Button -->
+      <div class="ptt-touch-area">
+        <button class="mobile-ptt-btn" id="mobilePttBtn">
+          <div class="mic-icon">🎙️</div>
+          <span class="ptt-main-text">HOLD TO TALK</span>
+          <span class="ptt-sub-text">16kHz Local STT</span>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="phone.js"></script>
+</body>
+</html>

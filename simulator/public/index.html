@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iTantra: EdgeSpeech Transceiver - Live Testbed & Evaluation Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="top-header">
+      <div class="logo-area">
+        <div class="badge-icon">🎙️</div>
+        <div>
+          <h1 class="brand-title">iTantra <span class="accent-text">EdgeSpeech</span></h1>
+          <p class="brand-sub">Offline Neural Speech Transceiver • Smart India Hackathon</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <div class="metric-pill">
+          <span class="pill-label">LINK BITRATE</span>
+          <span class="pill-val saffron">~48 Bytes / Pkt</span>
+        </div>
+        <div class="metric-pill">
+          <span class="pill-label">COMPRESSION</span>
+          <span class="pill-val emerald">99.86% vs PCM</span>
+        </div>
+        <div class="metric-pill">
+          <span class="pill-label">CRYPTO</span>
+          <span class="pill-val cyan">AES-256-GCM / HMAC</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Physical Android Phone Connection Banner -->
+    <section class="glass-card connect-phones-banner">
+      <div class="banner-left">
+        <div class="phone-pair-icon">📱 ➔ 📱</div>
+        <div>
+          <h3>Use On Two Real Android Phones Right Now</h3>
+          <p class="banner-sub">Make sure both phones are connected to the same Wi-Fi (or mobile hotspot). Open these links in Chrome on your phones:</p>
+        </div>
+      </div>
+      <div class="banner-links">
+        <div class="phone-link-card">
+          <span class="p-badge">PHONE 1 (Node A)</span>
+          <a class="p-url" href="/phone.html?id=A" target="_blank" id="phoneALink">http://192.168.0.102:8088/phone.html?id=A</a>
+        </div>
+        <div class="phone-link-card">
+          <span class="p-badge b-badge">PHONE 2 (Node B)</span>
+          <a class="p-url" href="/phone.html?id=B" target="_blank" id="phoneBLink">http://192.168.0.102:8088/phone.html?id=B</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="transceiver-tab">📻 Live Dual-Phone Transceiver</button>
+      <button class="tab-btn" data-tab="benchmarks-tab">📊 10-Language Benchmarks & Waterfall</button>
+      <button class="tab-btn" data-tab="security-tab">🛡️ Security & Protocol Fuzzing</button>
+      <button class="tab-btn" data-tab="architecture-tab">🏗️ Architecture Blueprint</button>
+    </nav>
+
+    <!-- TAB 1: Live Dual-Phone Transceiver -->
+    <main id="transceiver-tab" class="tab-content active">
+      <!-- Network Simulator Controls Bar -->
+      <section class="network-control-bar glass-card">
+        <div class="ctrl-group">
+          <label>ACTIVE TRANSPORT</label>
+          <div class="segmented-control" id="transportSelector">
+            <button class="seg-btn active" data-tier="WIFI_DIRECT">📶 Wi-Fi Direct (P2P)</button>
+            <button class="seg-btn" data-tier="LOCAL_WIFI">🌐 Local Wi-Fi (NSD)</button>
+            <button class="seg-btn" data-tier="BLUETOOTH">📡 Bluetooth (RFCOMM)</button>
+            <button class="seg-btn offline-btn" data-tier="OFFLINE">🚫 Disconnected (Offline Queue)</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group slider-group">
+          <div class="slider-header">
+            <span>PACKET LOSS: <strong id="lossVal">0%</strong></span>
+          </div>
+          <input type="range" id="lossSlider" min="0" max="40" step="5" value="0" />
+        </div>
+
+        <div class="ctrl-group slider-group">
+          <div class="slider-header">
+            <span>NETWORK LATENCY: <strong id="latencyVal">25 ms</strong></span>
+          </div>
+          <input type="range" id="latencySlider" min="5" max="500" step="15" value="25" />
+        </div>
+      </section>
+
+      <!-- Transceiver Grid: Phone A | Network Pipe | Phone B -->
+      <div class="transceiver-grid">
+        <!-- PHONE A -->
+        <div class="phone-frame glass-card" id="phoneA">
+          <div class="phone-notch"></div>
+          <div class="phone-header">
+            <div class="device-info">
+              <span class="status-dot green" id="statusA"></span>
+              <strong>Phone A (Pixel 8)</strong>
+            </div>
+            <div class="status-tags">
+              <span class="tag" id="tierA">Wi-Fi Direct</span>
+              <span class="tag enc">🔒 Authenticated</span>
+            </div>
+          </div>
+
+          <!-- Language Selector -->
+          <div class="input-row">
+            <label>SPOKEN LANGUAGE</label>
+            <select id="langSelectA" class="lang-dropdown">
+              <option value="hi" selected>हिन्दी (Hindi)</option>
+              <option value="gu">ગુજરાતી (Gujarati)</option>
+              <option value="mr">मराठी (Marathi)</option>
+              <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              <option value="ml">മലയാളം (Malayalam)</option>
+              <option value="ta">தமிழ் (Tamil)</option>
+              <option value="te">తెలుగు (Telugu)</option>
+              <option value="or">ଓଡ଼ିଆ (Odia)</option>
+              <option value="bn">বাংলা (Bengali)</option>
+              <option value="en">English (Indian)</option>
+            </select>
+          </div>
+
+          <!-- Live Mic & Speech Box -->
+          <div class="speech-display-box" id="speechBoxA">
+            <div class="vad-indicator" id="vadA">
+              <span class="vad-bulb"></span>
+              <span class="vad-text">VAD IDLE</span>
+            </div>
+            <p class="transcription-text" id="transcriptionA">Tap & hold PTT or click a quick phrase</p>
+          </div>
+
+          <!-- Quick Spoken Phrases -->
+          <div class="quick-phrases-area">
+            <label>PRESET UTTERANCES (1-CLICK TEST)</label>
+            <div class="phrase-chips" id="phraseChipsA">
+              <!-- Dynamically populated based on selected language -->
+            </div>
+          </div>
+
+          <!-- Custom Utterance Input -->
+          <div class="custom-input-row">
+            <input type="text" id="customInputA" placeholder="Type custom speech..." />
+            <button class="btn-secondary" id="sendCustomBtnA">Send</button>
+          </div>
+
+          <!-- Mode Switches -->
+          <div class="mode-toggles">
+            <label class="toggle-label">
+              <input type="checkbox" id="continuousA" />
+              <span>Hands-Free VAD Mode</span>
+            </label>
+            <button class="alert-broadcast-btn" id="alertBtnA">🚨 Emergency Alert</button>
+          </div>
+
+          <!-- Big PTT Button -->
+          <div class="ptt-container">
+            <button class="ptt-btn" id="pttBtnA">
+              <div class="mic-glyph">🎙️</div>
+              <span class="ptt-title">HOLD TO TALK</span>
+              <span class="ptt-sub">16kHz Local STT</span>
+            </button>
+          </div>
+
+          <!-- Message History on Phone A -->
+          <div class="history-box">
+            <div class="history-title">Recent Activity</div>
+            <div class="history-list" id="historyListA"></div>
+          </div>
+        </div>
+
+        <!-- NETWORK LINK PIPE & PACKET INSPECTOR -->
+        <div class="network-pipe-center glass-card">
+          <div class="pipe-header">
+            <h3>iTantra Binary Bus</h3>
+            <span class="pipe-status" id="pipeStatus">Link Active • 25ms RTT</span>
+          </div>
+
+          <!-- Animated Packet Wire -->
+          <div class="packet-wire">
+            <div class="wire-lane">
+              <div class="packet-token" id="packetToken"></div>
+            </div>
+          </div>
+
+          <!-- Raw Binary Frame Dissector -->
+          <div class="frame-dissector">
+            <h4>LIVE PACKET DISSECTOR (TEXT ONLY)</h4>
+            <div class="dissector-grid" id="dissectorFields">
+              <div class="field"><span class="flabel">MAGIC</span><span class="fval" id="dispMagic">0x49 0x54 ('IT')</span></div>
+              <div class="field"><span class="flabel">VER / TYPE</span><span class="fval" id="dispType">0x01 / TEXT_FINAL</span></div>
+              <div class="field"><span class="flabel">FLAGS</span><span class="fval" id="dispFlags">0x08 (ACK_REQ)</span></div>
+              <div class="field"><span class="flabel">SEQ #</span><span class="fval saffron" id="dispSeq">1</span></div>
+              <div class="field"><span class="flabel">LANG</span><span class="fval" id="dispLang">hi (Hindi)</span></div>
+              <div class="field"><span class="flabel">PAYLOAD</span><span class="fval emerald" id="dispLen">38 Bytes</span></div>
+            </div>
+
+            <div class="hex-dump-box">
+              <div class="hex-title">FRAME RAW HEX (BINARY PROTOCOL)</div>
+              <code id="hexDump">49 54 01 20 08 25 88 99 AA BB CC DD EE FF ...</code>
+            </div>
+
+            <div class="comparison-card">
+              <div class="comp-item">
+                <span class="c-title">Mic PCM (2s Audio)</span>
+                <span class="c-val red">64,000 B (256 kbps)</span>
+              </div>
+              <div class="comp-arrow">➔</div>
+              <div class="comp-item">
+                <span class="c-title">iTantra Frame</span>
+                <span class="c-val green" id="compFrameSize">91 B (99.86% saved!)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Packet Log -->
+          <div class="packet-log-container">
+            <h4>EVENT LOG</h4>
+            <div class="packet-log" id="packetLog"></div>
+          </div>
+        </div>
+
+        <!-- PHONE B -->
+        <div class="phone-frame glass-card" id="phoneB">
+          <div class="phone-notch"></div>
+          <div class="phone-header">
+            <div class="device-info">
+              <span class="status-dot green" id="statusB"></span>
+              <strong>Phone B (Galaxy S23)</strong>
+            </div>
+            <div class="status-tags">
+              <span class="tag" id="tierB">Wi-Fi Direct</span>
+              <span class="tag enc">🔒 Authenticated</span>
+            </div>
+          </div>
+
+          <!-- Language Selector -->
+          <div class="input-row">
+            <label>SYNTHESIS / REPLY LANGUAGE</label>
+            <select id="langSelectB" class="lang-dropdown">
+              <option value="hi" selected>हिन्दी (Hindi)</option>
+              <option value="gu">ગુજરાતી (Gujarati)</option>
+              <option value="mr">मराठी (Marathi)</option>
+              <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              <option value="ml">മലയാളം (Malayalam)</option>
+              <option value="ta">தமிழ் (Tamil)</option>
+              <option value="te">తెలుగు (Telugu)</option>
+              <option value="or">ଓଡ଼ିଆ (Odia)</option>
+              <option value="bn">বাংলা (Bengali)</option>
+              <option value="en">English (Indian)</option>
+            </select>
+          </div>
+
+          <!-- Live Speaker Audio & Speech Box -->
+          <div class="speech-display-box speaker-box" id="speechBoxB">
+            <div class="speaker-wave-indicator" id="speakerWave">
+              <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+              <span class="wave-text">SPEAKER IDLE</span>
+            </div>
+            <p class="transcription-text" id="transcriptionB">Waiting for incoming packet to synthesize...</p>
+          </div>
+
+          <!-- Quick Spoken Phrases for Reply -->
+          <div class="quick-phrases-area">
+            <label>PRESET REPLIES (1-CLICK TEST)</label>
+            <div class="phrase-chips" id="phraseChipsB"></div>
+          </div>
+
+          <!-- Custom Utterance Input -->
+          <div class="custom-input-row">
+            <input type="text" id="customInputB" placeholder="Reply with speech..." />
+            <button class="btn-secondary" id="sendCustomBtnB">Reply</button>
+          </div>
+
+          <!-- Mode Switches -->
+          <div class="mode-toggles">
+            <label class="toggle-label">
+              <input type="checkbox" id="continuousB" />
+              <span>Hands-Free VAD Mode</span>
+            </label>
+            <button class="alert-broadcast-btn" id="alertBtnB">🚨 Emergency Alert</button>
+          </div>
+
+          <!-- Big PTT Button (Phone B can talk back!) -->
+          <div class="ptt-container">
+            <button class="ptt-btn reply-ptt" id="pttBtnB">
+              <div class="mic-glyph">🎙️</div>
+              <span class="ptt-title">HOLD TO REPLY</span>
+              <span class="ptt-sub">16kHz Local STT</span>
+            </button>
+          </div>
+
+          <!-- Message History on Phone B -->
+          <div class="history-box">
+            <div class="history-title">Received & Synthesized Audio</div>
+            <div class="history-list" id="historyListB"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 2: 10-Language Benchmarks & Latency Waterfall -->
+    <section id="benchmarks-tab" class="tab-content">
+      <div class="benchmarks-layout">
+        <!-- Latency Waterfall Card -->
+        <div class="glass-card waterfall-card">
+          <div class="section-title-row">
+            <div>
+              <h3>End-to-End Latency Waterfall (T0 to T8)</h3>
+              <p class="sub">Measured on Low-End Target Profile (2GB RAM, Quad-Core ARM CPU)</p>
+            </div>
+            <div class="waterfall-total">
+              <span class="tot-label">TOTAL SPEECH-TO-HEARD</span>
+              <span class="tot-val emerald" id="wfTotalLatency">~0.98 sec</span>
+            </div>
+          </div>
+
+          <div class="waterfall-timeline" id="waterfallTimeline">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- 10 Indian Language Benchmark Matrix -->
+        <div class="glass-card matrix-card">
+          <div class="section-title-row">
+            <div>
+              <h3>10-Language Embedded Model Matrix</h3>
+              <p class="sub">Optimized for AI4Bharat IndicConformer & Indic-TTS on Android CPU / XNNPACK</p>
+            </div>
+            <button class="btn-refresh" id="refreshBenchBtn">↻ Recalculate Matrix</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="benchmark-table" id="benchmarkTable">
+              <thead>
+                <tr>
+                  <th>Lang</th>
+                  <th>Language Name</th>
+                  <th>STT Model</th>
+                  <th>Storage</th>
+                  <th>RAM</th>
+                  <th>WER (INT8)</th>
+                  <th>STT RTF</th>
+                  <th>TTS RTF</th>
+                  <th>E2E Latency</th>
+                </tr>
+              </thead>
+              <tbody id="benchmarkBody">
+                <!-- Populated via API -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Security & Protocol Fuzzing -->
+    <section id="security-tab" class="tab-content">
+      <div class="security-layout">
+        <div class="glass-card fuzzer-card">
+          <div class="section-title-row">
+            <div>
+              <h3>Adversarial Protocol Fuzzing Suite</h3>
+              <p class="sub">Fuzzing the binary deserializer, replay guard, and HMAC tag with mutated packets</p>
+            </div>
+            <button class="btn-primary-action" id="runFuzzBtn">⚡ Launch 1,000-Packet Attack Campaign</button>
+          </div>
+
+          <div class="fuzzer-metrics-grid">
+            <div class="fuzz-stat">
+              <span class="f-label">TOTAL ITERATIONS</span>
+              <span class="f-val" id="fuzzTotal">0</span>
+            </div>
+            <div class="fuzz-stat">
+              <span class="f-label">MALFORMED REJECTED</span>
+              <span class="f-val emerald" id="fuzzRejected">0</span>
+            </div>
+            <div class="fuzz-stat">
+              <span class="f-label">UNHANDLED CRASHES</span>
+              <span class="f-val green-zero" id="fuzzCrashes">0</span>
+            </div>
+            <div class="fuzz-stat">
+              <span class="f-label">THROUGHPUT</span>
+              <span class="f-val cyan" id="fuzzSpeed">0 fps</span>
+            </div>
+          </div>
+
+          <div class="fuzz-distribution">
+            <h4>Rejection Breakdown by Adversarial Vector</h4>
+            <div class="dist-list" id="fuzzDistList">
+              <p class="placeholder-text">Click "Launch Campaign" to run the automated test harness.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card security-specs-card">
+          <h3>Cryptographic Security Specification</h3>
+          <ul class="spec-checklist">
+            <li><strong>Monotonic Sequence Window:</strong> Sliding window (128 packets) rejects expired or out-of-order replayed frames.</li>
+            <li><strong>Message ID Deduplication:</strong> Unique 64-bit ID prevents duplicate speech playback during lost ACKs.</li>
+            <li><strong>HMAC-SHA256 / AES-GCM Integrity:</strong> 16-byte authentication tag guarantees tamper-proof payloads.</li>
+            <li><strong>Memory Bounds:</strong> Bounded 4,096-byte max payload prevents memory exhaustion & DoS.</li>
+            <li><strong>Zero Audio Storage:</strong> Raw microphone PCM lives only in transient RAM, discarded immediately after inference.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Architecture Blueprint -->
+    <section id="architecture-tab" class="tab-content">
+      <div class="glass-card arch-card">
+        <h3>Master Architecture: iTantra EdgeSpeech Transceiver</h3>
+        <p class="sub">Core Innovation: Speech stays local. Only validated text + control metadata crosses the link.</p>
+        <pre class="ascii-art">
+┌───────────────────────────────────────────────────────────────┐
+│ PHONE A (LOCAL NODE)                                          │
+│                                                               │
+│ Mic ──► 16kHz PCM ──► Circular RingBuffer (C++) ──► VAD       │
+│                                                      │        │
+│                                           speech / silence    │
+│                                                      ▼        │
+│ Final Text ◄── Endpoint Detector ◄── Streaming IndicConformer │
+│      │                                                        │
+│      ▼                                                        │
+│ AES-GCM Encrypt + Frame Header (Magic: 0x4954, Tag: 16B)      │
+│      │                                                        │
+│      ▼                                                        │
+│ Offline Queue (SQLite fallback) ──► Transport Layer           │
+└───────────────────────────────┬───────────────────────────────┘
+                                │ Wi-Fi Direct / LAN / BLE
+                                ▼
+┌───────────────────────────────────────────────────────────────┐
+│ PHONE B (REMOTE NODE)                                         │
+│                                                               │
+│ Transport Ingress ──► Frame Validation ──► Replay Guard       │
+│                                                │              │
+│                                         Sequence & Window     │
+│                                                ▼              │
+│ Normal Queue / Priority Alert ◄── Message Deduplication       │
+│      │                                                        │
+│      ▼                                                        │
+│ Text Normalizer ──► Embedded Indic-TTS (FastPitch INT8)       │
+│                          │                                    │
+│                          ▼                                    │
+│       AudioTrack Stream Buffer ──► Loudspeaker                │
+└───────────────────────────────────────────────────────────────┘
+        </pre>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

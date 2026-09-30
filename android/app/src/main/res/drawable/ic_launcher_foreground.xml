@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Center Radio / Audio Transceiver Waves Motif -->
+    <!-- Left Inner Wave -->
+    <path
+        android:pathData="M39,44 A16,16 0 0,0 39,64"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+
+    <!-- Left Outer Wave -->
+    <path
+        android:pathData="M32,38 A24,24 0 0,0 32,70"
+        android:strokeWidth="3.2"
+        android:strokeColor="#93C5FD"
+        android:strokeLineCap="round" />
+
+    <!-- Right Inner Wave -->
+    <path
+        android:pathData="M69,44 A16,16 0 0,1 69,64"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+
+    <!-- Right Outer Wave -->
+    <path
+        android:pathData="M76,38 A24,24 0 0,1 76,70"
+        android:strokeWidth="3.2"
+        android:strokeColor="#93C5FD"
+        android:strokeLineCap="round" />
+
+    <!-- Central Microphone / Transceiver Core -->
+    <!-- Mic Body Capsule -->
+    <path
+        android:pathData="M54,34 L54,34 A7,7 0 0,1 61,41 L61,55 A7,7 0 0,1 47,55 L47,41 A7,7 0 0,1 54,34 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Mic Cradle -->
+    <path
+        android:pathData="M43,49 C43,59 65,59 65,49"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+
+    <!-- Mic Stand Stem -->
+    <path
+        android:pathData="M54,58 L54,68"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+
+    <!-- Mic Base Foot -->
+    <path
+        android:pathData="M46,68 L62,68"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+
+    <!-- High-tech signal dot on top of transceiver -->
+    <path
+        android:pathData="M54,27m-2.5,0a2.5,2.5 0 1,0 5,0a2.5,2.5 0 1,0 -5,0"
+        android:fillColor="#38BDF8" />
+</vector>

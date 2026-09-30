@@ -1,0 +1,41 @@
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+.venv/
+env/
+venv/
+
+# Android & Gradle
+.gradle/
+build/
+*/build/
+*/*/build/
+.cxx/
+*/.cxx/
+*/*/.cxx/
+captures/
+android/local.properties
+*.apk
+*.aab
+*.dex
+
+# IDE
+.idea/
+*.iml
+.vscode/
